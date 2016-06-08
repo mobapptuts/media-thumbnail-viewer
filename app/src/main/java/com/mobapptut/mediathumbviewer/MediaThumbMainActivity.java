@@ -12,6 +12,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 public class MediaThumbMainActivity extends AppCompatActivity
@@ -19,11 +21,19 @@ public class MediaThumbMainActivity extends AppCompatActivity
 
     private final static int READ_EXTERNAL_STORAGE_PERMMISSION_RESULT = 0;
     private final static int MEDIASTORE_LOADER_ID = 0;
+    private RecyclerView mThumbnailRecyclerView;
+    private MediaStoreAdapter mMediaStoreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_thumb_main);
+
+        mThumbnailRecyclerView = (RecyclerView) findViewById(R.id.thumbnailRecyclerView);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        mThumbnailRecyclerView.setLayoutManager(gridLayoutManager);
+        mMediaStoreAdapter = new MediaStoreAdapter(this);
+        mThumbnailRecyclerView.setAdapter(mMediaStoreAdapter);
 
         checkReadExternalStoragePermission();
     }
@@ -86,11 +96,11 @@ public class MediaThumbMainActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        mMediaStoreAdapter.changeCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mMediaStoreAdapter.changeCursor(null);
     }
 }

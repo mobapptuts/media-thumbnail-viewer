@@ -4,6 +4,8 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:id="@+id/mediastoreImageView"
