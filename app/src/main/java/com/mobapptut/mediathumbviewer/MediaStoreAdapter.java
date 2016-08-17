@@ -3,12 +3,15 @@ package com.mobapptut.mediathumbviewer;
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 /**
  * Created by nigelhenshaw on 1/06/2016.
@@ -31,11 +34,17 @@ public class MediaStoreAdapter extends RecyclerView.Adapter<MediaStoreAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /*
         Bitmap bitmap = getBitmapFromMediaStore(position);
         if (bitmap != null) {
             holder.getImageView().setImageBitmap(bitmap);
         }
-
+        */
+        Glide.with(mActivity)
+                .load(getUriFromMediaStore(position))
+                .centerCrop()
+                .override(96, 96)
+                .into(holder.getImageView());
     }
 
     @Override
@@ -100,5 +109,15 @@ public class MediaStoreAdapter extends RecyclerView.Adapter<MediaStoreAdapter.Vi
             default:
                 return null;
         }
+    }
+
+    private Uri getUriFromMediaStore(int position) {
+        int dataIndex = mMediaStoreCursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+
+        mMediaStoreCursor.moveToPosition(position);
+
+        String dataString = mMediaStoreCursor.getString(dataIndex);
+        Uri mediaUri = Uri.parse("file://" + dataString);
+        return mediaUri;
     }
 }

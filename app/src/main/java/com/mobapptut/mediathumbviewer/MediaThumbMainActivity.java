@@ -77,6 +77,7 @@ public class MediaThumbMainActivity extends AppCompatActivity
         String[] projection = {
                 MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.DATA,
                 MediaStore.Files.FileColumns.MEDIA_TYPE
         };
         String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
