@@ -3,6 +3,7 @@ package com.mobapptut.mediathumbviewer;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,7 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 public class MediaThumbMainActivity extends AppCompatActivity
-    implements LoaderManager.LoaderCallbacks<Cursor>{
+    implements LoaderManager.LoaderCallbacks<Cursor>, MediaStoreAdapter.OnClickThumbListener {
 
     private final static int READ_EXTERNAL_STORAGE_PERMMISSION_RESULT = 0;
     private final static int MEDIASTORE_LOADER_ID = 0;
@@ -103,5 +104,10 @@ public class MediaThumbMainActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mMediaStoreAdapter.changeCursor(null);
+    }
+
+    @Override
+    public void OnClickImage(Uri imageUri) {
+        Toast.makeText(MediaThumbMainActivity.this, "Image uri = " + imageUri.toString(), Toast.LENGTH_SHORT).show();
     }
 }
