@@ -1,6 +1,7 @@
 package com.mobapptut.mediathumbviewer;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -108,6 +109,9 @@ public class MediaThumbMainActivity extends AppCompatActivity
 
     @Override
     public void OnClickImage(Uri imageUri) {
-        Toast.makeText(MediaThumbMainActivity.this, "Image uri = " + imageUri.toString(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(MediaThumbMainActivity.this, "Image uri = " + imageUri.toString(), Toast.LENGTH_SHORT).show();
+        Intent fullScreenIntent = new Intent(this, FullScreenImageActivity.class);
+        fullScreenIntent.setData(imageUri);
+        startActivity(fullScreenIntent);
     }
 }
