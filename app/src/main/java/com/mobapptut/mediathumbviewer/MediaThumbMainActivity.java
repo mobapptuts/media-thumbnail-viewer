@@ -114,4 +114,12 @@ public class MediaThumbMainActivity extends AppCompatActivity
         fullScreenIntent.setData(imageUri);
         startActivity(fullScreenIntent);
     }
+
+    @Override
+    public void OnClickVideo(Uri videoUri) {
+        Intent videoPlayIntent = new Intent(this, VideoPlayActivity.class);
+        videoPlayIntent.setData(videoUri);
+        startActivity(videoPlayIntent);
+
+    }
 }

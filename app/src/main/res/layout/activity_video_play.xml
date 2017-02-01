@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_video_play"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mobapptut.mediathumbviewer.VideoPlayActivity">
+
+    <SurfaceView
+        android:layout_width="344dp"
+        android:layout_height="386dp"
+        android:id="@+id/videoSurfaceView"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_media_pause"
+        android:id="@+id/videoPlayPauseButton"
+        android:onClick="playPauseClick"
+        app:layout_constraintRight_toRightOf="@+id/videoSurfaceView"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView"
+        app:layout_constraintLeft_toLeftOf="@+id/videoSurfaceView" />
+</android.support.constraint.ConstraintLayout>
