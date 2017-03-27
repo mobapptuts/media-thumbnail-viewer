@@ -8,6 +8,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,26 @@ public class VideoPlayActivity extends AppCompatActivity {
     private ImageButton mPlayPauseButton;
     private SurfaceView mSurfaceView;
 
+    private MediaControllerCompat mController;
+    private MediaControllerCompat.TransportControls mControllerTransportControls;
+    private MediaControllerCompat.Callback mControllerCallback = new MediaControllerCompat.Callback() {
+        @Override
+        public void onPlaybackStateChanged(PlaybackStateCompat state) {
+            super.onPlaybackStateChanged(state);
+
+            switch (state.getState()) {
+                case PlaybackStateCompat.STATE_PLAYING:
+                    mPlayPauseButton.setImageResource(R.mipmap.ic_media_pause);
+                    break;
+                case PlaybackStateCompat.STATE_PAUSED:
+                    mPlayPauseButton.setImageResource(R.mipmap.ic_media_play);
+                    break;
+                case PlaybackStateCompat.STATE_STOPPED:
+                    mPlayPauseButton.setImageResource(R.mipmap.ic_media_play);
+                    break;
+            }
+        }
+    };
     private PlaybackStateCompat.Builder mPBuilder;
     private MediaSessionCompat mSession;
     private class MediaSessionCallback extends MediaSessionCompat.Callback implements SurfaceHolder.Callback, MediaPlayer.OnCompletionListener,
@@ -166,25 +187,57 @@ public class VideoPlayActivity extends AppCompatActivity {
         mSession.setCallback(new MediaSessionCallback(this));
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mPBuilder = new PlaybackStateCompat.Builder();
+        mController = new MediaControllerCompat(this, mSession);
+        mControllerTransportControls = mController.getTransportControls();
 
     }
 
     public void playPauseClick(View view) {
+        if(mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+            mControllerTransportControls.pause();
+        } else if (mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED ||
+                mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_STOPPED ||
+                mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_NONE) {
+            mControllerTransportControls.play();
+        }
 
     }
 
     @Override
     protected void onStop() {
 
+        mController.unregisterCallback(mControllerCallback);
+        if(mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING ||
+                mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PAUSED) {
+            mControllerTransportControls.stop();
+        }
 
         super.onStop();
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        mController.registerCallback(mControllerCallback);
+        mPBuilder.setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PLAY_PAUSE);
+        mSession.setPlaybackState(mPBuilder.build());
+    }
+
+    @Override
     protected void onPause() {
+
+        if(mController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+            mControllerTransportControls.pause();
+        }
         super.onPause();
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        mSession.release();
+    }
 }

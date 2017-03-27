@@ -21,7 +21,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_media_pause"
+        app:srcCompat="@mipmap/ic_media_play"
         android:id="@+id/videoPlayPauseButton"
         android:onClick="playPauseClick"
         app:layout_constraintRight_toRightOf="@+id/videoSurfaceView"
