@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+
+import java.io.File;
 
 /**
  * Created by nigelhenshaw on 1/06/2016.
@@ -139,7 +142,9 @@ public class MediaStoreAdapter extends RecyclerView.Adapter<MediaStoreAdapter.Vi
 
         mMediaStoreCursor.moveToPosition(position);
         String dataString = mMediaStoreCursor.getString(dataIndex);
-        Uri mediaUri = Uri.parse("file://" + dataString);
+        String authorities = mActivity.getPackageName() + ".fileprovider";
+        Uri mediaUri = FileProvider.getUriForFile(mActivity, authorities, new File(dataString));
+//        Uri mediaUri = Uri.parse("file://" + dataString);
 
         switch (mMediaStoreCursor.getInt(mediaTypeIndex)) {
             case MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE:
