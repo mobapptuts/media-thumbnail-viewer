@@ -2,8 +2,10 @@ package com.mobapptut.mediathumbviewer;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -12,6 +14,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 public class FullScreenImageActivity extends AppCompatActivity {
+
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +26,10 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
         Intent callingActivityIntent = getIntent();
         if(callingActivityIntent != null) {
-            Uri imageUri = callingActivityIntent.getData();
-            if(imageUri != null && fullScreenImageView != null) {
+            mImageUri = callingActivityIntent.getData();
+            if(mImageUri != null && fullScreenImageView != null) {
                 Glide.with(this)
-                        .load(imageUri)
+                        .load(mImageUri)
                         .into(fullScreenImageView);
             }
         }
@@ -36,9 +40,14 @@ public class FullScreenImageActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.full_image_share, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.image_share_menu);
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        shareActionProvider.setShareIntent(createShareIntent());
         return true;
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -50,5 +59,13 @@ public class FullScreenImageActivity extends AppCompatActivity {
         }
         
         return true;
+    }
+*/
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, mImageUri);
+        return shareIntent;
     }
 }

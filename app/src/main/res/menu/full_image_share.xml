@@ -4,6 +4,7 @@
     <item android:icon="@mipmap/ic_share"
         android:title="@string/image_share"
         android:id="@+id/image_share_menu"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         app:showAsAction="ifRoom" />
 
 </menu>
