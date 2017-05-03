@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Media Thumb Viewer</string>
+    <string name="image_share">Share Image</string>
 </resources>
