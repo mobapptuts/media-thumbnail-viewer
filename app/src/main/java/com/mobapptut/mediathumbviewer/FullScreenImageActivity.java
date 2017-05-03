@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-public class FullScreenImageActivity extends AppCompatActivity {
+public class FullScreenImageActivity extends AppCompatActivity implements
+        View.OnLongClickListener {
 
     private Uri mImageUri;
 
@@ -23,6 +25,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_screen_image);
 
         ImageView fullScreenImageView = (ImageView) findViewById(R.id.fullScreenImageView);
+        fullScreenImageView.setOnLongClickListener(this);
 
         Intent callingActivityIntent = getIntent();
         if(callingActivityIntent != null) {
@@ -67,5 +70,13 @@ public class FullScreenImageActivity extends AppCompatActivity {
         shareIntent.setType("image/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, mImageUri);
         return shareIntent;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        Intent shareIntent = createShareIntent();
+        startActivity(Intent.createChooser(shareIntent, "send to"));
+        return true;
     }
 }
